@@ -34,6 +34,12 @@ public class ChecklistItemHeaderView: UITableViewHeaderFooterView {
         return view
     }()
     
+    public let maskingView: UIView = {
+        let view: UIView = UIView()
+        view.backgroundColor = UIColor.white.withAlphaComponent(0.7)
+        return view
+    }()
+    
     // MARK: Stored Properties
     private var section: Int = 0
 
@@ -79,6 +85,18 @@ extension ChecklistItemHeaderView {
     
     public func setSection(_ section: Int) {
         self.section = section
+    }
+    
+    public func hasMasked() {
+        self.subview(forAutoLayout: self.maskingView)
+        
+        self.maskingView.snp.remakeConstraints { (make: ConstraintMaker) in
+            make.edges.equalToSuperview()
+        }
+    }
+    
+    public func removeMasking() {
+        self.maskingView.removeFromSuperview()
     }
 }
 

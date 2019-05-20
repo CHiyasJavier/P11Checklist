@@ -54,7 +54,8 @@ public final class MainView: UIView {
         //Sample Data
         let sectionInfoA: SectionInfo = SectionInfo(section: 0, title: "Section 0", items: ["A", "B", "C"])
         let sectionInfoB: SectionInfo = SectionInfo(section: 1, title: "Section 1", items: ["A", "B", "C"])
-        sectionInfoList = [sectionInfoA, sectionInfoB]
+        let sectionInfoC: SectionInfo = SectionInfo(section: 2, title: "Section 2", items: ["A", "B", "C"])
+        sectionInfoList = [sectionInfoA, sectionInfoB, sectionInfoC]
         
     }
     
@@ -81,12 +82,13 @@ extension MainView: UITableViewDataSource {
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         guard
             let cell: ItemWithTextInputCell = tableView.dequeueReusableCell(withIdentifier: ItemWithTextInputCell.identifier,
                 for: indexPath
                 ) as? ItemWithTextInputCell
         else { return UITableViewCell() }
-        
+
         return cell
     }
     
@@ -97,14 +99,31 @@ extension MainView: UITableViewDelegate {
    
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard
-            let checklistItemHeaderView: ChecklistItemHeaderView = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: ChecklistItemHeaderView.identifier) as? ChecklistItemHeaderView
-            else { return UIView() }
+            let checklistItemHeaderView: ChecklistItemHeaderView = self.tableView.dequeueReusableHeaderFooterView(
+                withIdentifier: ChecklistItemHeaderView.identifier
+            ) as? ChecklistItemHeaderView
+            
+        else { return UIView() }
+
         let sectionInfo: SectionInfo = self.sectionInfoList[section]
+        
+        
         checklistItemHeaderView.setTitle(sectionInfo.title ?? "")
         checklistItemHeaderView.setSection(section)
         checklistItemHeaderView.delegate = self
-        
         checklistItemHeaderView.checkboxButton.isSelected = sectionInfo.isExpanded
+        
+        checklistItemHeaderView.backgroundColor = UIColor.green.withAlphaComponent(0.5)
+        
+        let expandedSection: [SectionInfo] = self.sectionInfoList.filter({ $0.isExpanded} )
+        
+        switch expandedSection.count > 0 && sectionInfo.isExpanded == false {
+        case true:
+            checklistItemHeaderView.hasMasked()
+        case false:
+            checklistItemHeaderView.removeMasking()
+        }
+
         return checklistItemHeaderView
     }
     
@@ -118,14 +137,8 @@ extension MainView: ChecklistItemHeaderViewDelegate {
     
     public func didToggleCheckbox(_ section: Int) {
         let sectionInfo: SectionInfo = self.sectionInfoList[section]
-        switch sectionInfo.isExpanded {
-        case true:
-            sectionInfo.isExpanded = false
-        case false:
-            sectionInfo.isExpanded = true
-        }
-        let indexSet = IndexSet(integer:section)
-        self.tableView.reloadSections(indexSet, with: UITableView.RowAnimation.automatic)
+        sectionInfo.isExpanded.toggle()
+        self.tableView.reloadData()
     }
     
     
