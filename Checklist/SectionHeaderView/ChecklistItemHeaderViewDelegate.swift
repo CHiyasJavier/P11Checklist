@@ -7,3 +7,7 @@
 //
 
 import Foundation
+
+public protocol ChecklistItemHeaderViewDelegate: class {
+    func didTapCheckbox(section: Int)
+}

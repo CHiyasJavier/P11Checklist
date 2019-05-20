@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		0E90AAE7391A6D6026E63A01 /* Pods_ChecklistTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E2D7EE48A09AAAE3CD62736 /* Pods_ChecklistTests.framework */; };
+		6403648222923EEE0092C497 /* SectionInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6403648122923EEE0092C497 /* SectionInfo.swift */; };
+		6403648522924DCB0092C497 /* ItemWithTextInputCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6403648422924DCB0092C497 /* ItemWithTextInputCell.swift */; };
+		64036488229254370092C497 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64036487229254370092C497 /* Item.swift */; };
 		648EBEA0228E7BB500B7AEAA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 648EBE9F228E7BB500B7AEAA /* AppDelegate.swift */; };
 		648EBEA2228E7BB500B7AEAA /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 648EBEA1228E7BB500B7AEAA /* MainVC.swift */; };
 		648EBEA7228E7BCF00B7AEAA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 648EBEA6228E7BCF00B7AEAA /* Assets.xcassets */; };
@@ -46,6 +49,9 @@
 		11DD76E1DE2D469201C06BD8 /* Pods_Checklist.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Checklist.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E2D7EE48A09AAAE3CD62736 /* Pods_ChecklistTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChecklistTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		53572B412D581F91A7988611 /* Pods-Checklist.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Checklist.release.xcconfig"; path = "Target Support Files/Pods-Checklist/Pods-Checklist.release.xcconfig"; sourceTree = "<group>"; };
+		6403648122923EEE0092C497 /* SectionInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionInfo.swift; sourceTree = "<group>"; };
+		6403648422924DCB0092C497 /* ItemWithTextInputCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemWithTextInputCell.swift; sourceTree = "<group>"; };
+		64036487229254370092C497 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		648EBE9C228E7BB500B7AEAA /* Checklist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Checklist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		648EBE9F228E7BB500B7AEAA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		648EBEA1228E7BB500B7AEAA /* MainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainVC.swift; sourceTree = "<group>"; };
@@ -112,6 +118,30 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		6403648022923EEE0092C497 /* Section */ = {
+			isa = PBXGroup;
+			children = (
+				6403648122923EEE0092C497 /* SectionInfo.swift */,
+			);
+			path = Section;
+			sourceTree = "<group>";
+		};
+		64036483229249BA0092C497 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				6403648422924DCB0092C497 /* ItemWithTextInputCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		64036486229254240092C497 /* Item */ = {
+			isa = PBXGroup;
+			children = (
+				64036487229254370092C497 /* Item.swift */,
+			);
+			path = Item;
+			sourceTree = "<group>";
+		};
 		648EBE93228E7BB400B7AEAA = {
 			isa = PBXGroup;
 			children = (
@@ -137,7 +167,10 @@
 		648EBE9E228E7BB500B7AEAA /* Checklist */ = {
 			isa = PBXGroup;
 			children = (
+				64036486229254240092C497 /* Item */,
+				6403648022923EEE0092C497 /* Section */,
 				648EBED8228E83B600B7AEAA /* Extensions */,
+				64036483229249BA0092C497 /* Cells */,
 				648EBED1228E7EFD00B7AEAA /* SectionHeaderView */,
 				648EBE9F228E7BB500B7AEAA /* AppDelegate.swift */,
 				648EBEA1228E7BB500B7AEAA /* MainVC.swift */,
@@ -427,6 +460,9 @@
 				648EBEA0228E7BB500B7AEAA /* AppDelegate.swift in Sources */,
 				648EBED5228E802000B7AEAA /* ChecklistWithAnswerHeaderViewDelegate.swift in Sources */,
 				648EBED3228E7FAA00B7AEAA /* MainView.swift in Sources */,
+				64036488229254370092C497 /* Item.swift in Sources */,
+				6403648222923EEE0092C497 /* SectionInfo.swift in Sources */,
+				6403648522924DCB0092C497 /* ItemWithTextInputCell.swift in Sources */,
 				648EBED7228E803300B7AEAA /* ChecklistItemHeaderViewDelegate.swift in Sources */,
 				648EBED0228E7E1900B7AEAA /* ChecklistItemHeaderView.swift in Sources */,
 			);
