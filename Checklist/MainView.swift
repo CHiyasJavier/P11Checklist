@@ -115,7 +115,7 @@ extension MainView: UITableViewDelegate {
 
 extension MainView: ChecklistItemHeaderViewDelegate {
     
-    public func didTapCheckbox(section: Int) {
+    public func didToggleCheckbox(_ section: Int) {
         let sectionInfo: SectionInfo = self.sectionInfoList[section]
         switch sectionInfo.isExpanded {
         case true:

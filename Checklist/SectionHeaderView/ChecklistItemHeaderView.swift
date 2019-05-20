@@ -16,9 +16,10 @@ public class ChecklistItemHeaderView: UITableViewHeaderFooterView {
 
     // MARK: - Subviews
     private let checkboxButton: UIButton = {
-        let view: UIButton = UIButton()
+        let view: UIButton = UIButton(type: UIButton.ButtonType.custom)
         view.setImage(#imageLiteral(resourceName: "uncheck-checkBox"), for: UIControl.State.normal)
-        view.addTarget(self, action: #selector(ChecklistItemHeaderView.tapCheckbox), for: UIControl.Event.touchUpInside)
+        view.setImage(#imageLiteral(resourceName: "checked_checkBox"), for: UIControl.State.selected)
+        view.addTarget(self, action: #selector(ChecklistItemHeaderView.toggleCheckbox), for: UIControl.Event.touchUpInside)
         return view
     }()
     
@@ -40,7 +41,7 @@ public class ChecklistItemHeaderView: UITableViewHeaderFooterView {
     public override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         self.subviews(forAutoLayout: [self.checkboxButton, self.itemLabel])
-        
+        self.checkboxButton.isSelected = false
         self.checkboxButton.snp.remakeConstraints { (make: ConstraintMaker) in
             make.leading.equalToSuperview().offset(20.0)
             make.height.equalTo(30)
@@ -62,10 +63,11 @@ public class ChecklistItemHeaderView: UITableViewHeaderFooterView {
 
 // MARK: - Target Action Methods
 extension ChecklistItemHeaderView {
-    
-    @objc public func tapCheckbox(_sender: UIButton) {
+
+    @objc public func toggleCheckbox(_sender: UIButton) {
+        self.checkboxButton.isSelected = !self.checkboxButton.isSelected
         guard let delegate = self.delegate else { return }
-        delegate.didTapCheckbox(section: section)
+        delegate.didToggleCheckbox(self.section)
     }
 }
 
