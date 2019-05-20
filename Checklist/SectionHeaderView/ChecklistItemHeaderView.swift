@@ -15,7 +15,7 @@ public class ChecklistItemHeaderView: UITableViewHeaderFooterView {
     public weak var delegate: ChecklistItemHeaderViewDelegate?
 
     // MARK: - Subviews
-    private let checkboxButton: UIButton = {
+    public let checkboxButton: UIButton = {
         let view: UIButton = UIButton(type: UIButton.ButtonType.custom)
         view.setImage(#imageLiteral(resourceName: "uncheck-checkBox"), for: UIControl.State.normal)
         view.setImage(#imageLiteral(resourceName: "checked_checkBox"), for: UIControl.State.selected)
@@ -44,14 +44,12 @@ public class ChecklistItemHeaderView: UITableViewHeaderFooterView {
         self.checkboxButton.isSelected = false
         self.checkboxButton.snp.remakeConstraints { (make: ConstraintMaker) in
             make.leading.equalToSuperview().offset(20.0)
-            make.height.equalTo(30)
-            make.width.equalTo(30)
+            make.height.equalTo(30.0)
             make.centerY.equalToSuperview()
         }
         
         self.itemLabel.snp.remakeConstraints { [unowned self] (make: ConstraintMaker) in
-            make.leading.equalTo(self.checkboxButton.snp.trailing).offset(10)
-            make.trailing.equalToSuperview()
+            make.leading.equalTo(self.checkboxButton.snp.trailing).offset(20.0)
             make.centerY.equalToSuperview()
         }
     }

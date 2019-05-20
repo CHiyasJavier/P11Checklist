@@ -42,7 +42,7 @@ public final class MainView: UIView {
             forHeaderFooterViewReuseIdentifier: ChecklistItemHeaderView.identifier)
         
         self.tableView.snp.remakeConstraints { (make: ConstraintMaker) in
-            make.top.equalToSuperview().offset(20.0)
+            make.top.equalTo(safeAreaLayoutGuide.snp.topMargin)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
             make.bottom.equalToSuperview()
@@ -104,6 +104,7 @@ extension MainView: UITableViewDelegate {
         checklistItemHeaderView.setSection(section)
         checklistItemHeaderView.delegate = self
         
+        checklistItemHeaderView.checkboxButton.isSelected = sectionInfo.isExpanded
         return checklistItemHeaderView
     }
     
@@ -120,14 +121,11 @@ extension MainView: ChecklistItemHeaderViewDelegate {
         switch sectionInfo.isExpanded {
         case true:
             sectionInfo.isExpanded = false
-            let indexSet = IndexSet(integer:section)
-            self.tableView.reloadSections(indexSet, with: UITableView.RowAnimation.automatic)
         case false:
-            let sectionInfo: SectionInfo = self.sectionInfoList[section]
             sectionInfo.isExpanded = true
-            let indexSet = IndexSet(integer: section)
-            self.tableView.reloadSections(indexSet, with: UITableView.RowAnimation.automatic)
         }
+        let indexSet = IndexSet(integer:section)
+        self.tableView.reloadSections(indexSet, with: UITableView.RowAnimation.automatic)
     }
     
     
