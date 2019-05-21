@@ -54,16 +54,16 @@ public final class MainView: UIView {
         self.tableView.delegate = self
         
         //Sample Data
-        let sectionInfoA: SectionInfo = SectionInfo(section: 0, title: "Section 0", items: ["A", "B", "C"])
-        let sectionInfoB: SectionInfo = SectionInfo(section: 1, title: "Section 1", items: ["A", "B", "C"])
-        let sectionInfoC: SectionInfo = SectionInfo(section: 2, title: "Section 2", items: ["A", "B", "C"])
-        let sectionInfoD: SectionInfo = SectionInfo(section: 2, title: "Section 2", items: ["A", "B", "C"])
+        let sectionInfoA: SectionInfo = SectionInfo(title: "Section 0", items: ["A", "B", "C"])
+        let sectionInfoB: SectionInfo = SectionInfo(title: "Section 1", items: ["A", "B", "C"])
+        let sectionInfoC: SectionInfo = SectionInfo(title: "Section 2", items: ["A", "B", "C"])
+        let sectionInfoD: SectionInfo = SectionInfo(title: "Section 2", items: ["A", "B", "C"])
         sectionInfoD.isEditInput = true
-        let sectionInfoE: SectionInfo = SectionInfo(section: 2, title: "Section 2", items: ["A", "B", "C"])
+        let sectionInfoE: SectionInfo = SectionInfo(title: "Section 2", items: ["A", "B", "C"])
         sectionInfoE.isEditInput = true
-        let sectionInfoF: SectionInfo = SectionInfo(section: 2, title: "Section 2", items: ["A", "B", "C"])
+        let sectionInfoF: SectionInfo = SectionInfo(title: "Section 2", items: ["A", "B", "C"])
         sectionInfoF.isEditInput = true
-        sectionInfoList = [sectionInfoA, sectionInfoB, sectionInfoC, sectionInfoD, sectionInfoE, sectionInfoF]
+        self.sectionInfoList = [sectionInfoA, sectionInfoB, sectionInfoC, sectionInfoD, sectionInfoE, sectionInfoF]
         
     }
     
@@ -111,8 +111,8 @@ extension MainView: UITableViewDelegate {
             guard
                 let checklistWithAsnwerHeaderView: ChecklistWithAnswerHeaderView = self.tableView.dequeueReusableHeaderFooterView(
                     withIdentifier: ChecklistWithAnswerHeaderView.identifier
-                    ) as? ChecklistWithAnswerHeaderView
-                else { return UIView() }
+                ) as? ChecklistWithAnswerHeaderView
+            else { return UIView() }
             
             checklistWithAsnwerHeaderView.setTitle(sectionInfo.title ?? "")
             checklistWithAsnwerHeaderView.setSubTitle("Answer")
@@ -133,9 +133,8 @@ extension MainView: UITableViewDelegate {
             guard
                 let checklistItemHeaderView: ChecklistItemHeaderView = self.tableView.dequeueReusableHeaderFooterView(
                     withIdentifier: ChecklistItemHeaderView.identifier
-                    ) as? ChecklistItemHeaderView
-                
-                else { return UIView() }
+                ) as? ChecklistItemHeaderView
+            else { return UIView() }
             
             checklistItemHeaderView.setTitle(sectionInfo.title ?? "")
             checklistItemHeaderView.setSection(section)
