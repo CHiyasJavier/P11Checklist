@@ -54,26 +54,26 @@ public final class MainView: UIView {
         self.tableView.delegate = self
         
         //Sample Data
-        let sectionInfoA: SectionInfo = SectionInfo(title: "Section 0", items: ["A", "B", "C"])
-        let sectionInfoB: SectionInfo = SectionInfo(title: "Section 1", items: ["A", "B", "C"])
-        let sectionInfoC: SectionInfo = SectionInfo(title: "Section 2", items: ["A", "B", "C"])
+        let sectionInfoA: SectionInfo = SectionInfo(title: "Section 0", items: ["A"])
+        let sectionInfoB: SectionInfo = SectionInfo(title: "Section 1", items: ["A"])
+        let sectionInfoC: SectionInfo = SectionInfo(title: "Section 2", items: ["A"])
         let sectionInfoD: SectionInfo = SectionInfo(
             title: "Section 3",
-            items: ["A", "B", "C"],
+            items: ["A"],
             withInput: "Je suis génial 1",
             isEditInput: true
         )
         
         let sectionInfoE: SectionInfo = SectionInfo(
             title: "Section 4",
-            items: ["A", "B", "C"],
+            items: ["A"],
             withInput: "Je suis génial 2",
             isEditInput: true
         )
         
         let sectionInfoF: SectionInfo = SectionInfo(
             title: "Section 5",
-            items: ["A", "B", "C"],
+            items: ["A"],
             withInput: "Je suis génial 3",
             isEditInput: true
         )
