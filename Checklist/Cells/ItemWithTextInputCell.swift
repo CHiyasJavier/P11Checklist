@@ -11,6 +11,9 @@ import SnapKit
 
 public class ItemWithTextInputCell: UITableViewCell {
     
+    // MARK: - Delegate Declaration
+    private weak var delegate: ItemWithTextInputCellDelegate?
+    
     // MARK: - Subviews
     public let supportingAnswerView: TextAreaView = {
         let view: TextAreaView = TextAreaView(
@@ -33,6 +36,7 @@ public class ItemWithTextInputCell: UITableViewCell {
             ofSize: 12.0,
             weight: UIFont.Weight.semibold
         )
+        view.isHidden = true
         return view
     }()
     
@@ -46,10 +50,10 @@ public class ItemWithTextInputCell: UITableViewCell {
         ])
         
         self.supportingAnswerView.snp.remakeConstraints { [unowned self] (make: ConstraintMaker) -> Void in
-            make.top.equalToSuperview()
+            make.top.equalToSuperview().offset(20.0)
             make.trailing.equalToSuperview().inset(20.0)
             make.leading.equalToSuperview().offset(20.0)
-            make.bottom.equalTo(self.saveButton.snp.top)
+            make.bottom.equalTo(self.saveButton.snp.top).inset(5.0)
         }
         
         self.saveButton.snp.remakeConstraints { (make: ConstraintMaker) in
@@ -64,7 +68,14 @@ public class ItemWithTextInputCell: UITableViewCell {
             action: #selector(ItemWithTextInputCell.didRecognizeTapGesture)
         )
         
+        self.saveButton.addTarget(
+            self,
+            action: #selector(ItemWithTextInputCell.saveButtonTapped),
+            for: UIControl.Event.touchUpInside
+        )
+        
         self.supportingAnswerView.getTextArea().addGestureRecognizer(tapGesture)
+        self.supportingAnswerView.delegate = self
     }
     
     public required init?(coder aDecoder: NSCoder) {
@@ -72,6 +83,7 @@ public class ItemWithTextInputCell: UITableViewCell {
     }
     
     private var model: SectionInfo!
+    private var sectionIndex: Int!
     
 }
 
@@ -79,14 +91,52 @@ public class ItemWithTextInputCell: UITableViewCell {
 extension ItemWithTextInputCell {
     public static var identifier: String = "ItemWithTextInputCell"
     
-    public func configure(with model: SectionInfo) {
+    public func configure(with model: SectionInfo, delegate: ItemWithTextInputCellDelegate, sectionIndex: Int) {
         self.model = model
+        self.delegate = delegate
+        self.sectionIndex = sectionIndex
+        
+        self.supportingAnswerView.getTextArea().text = self.model.supportingAnswer
     }
 }
 
 extension ItemWithTextInputCell {
     
-    @objc func didRecognizeTapGesture(_ gesture: UITapGestureRecognizer) {
+    @objc func didRecognizeTapGesture( _ gesture: UITapGestureRecognizer) {
         self.supportingAnswerView.getTextArea().becomeFirstResponder()
+    }
+    
+    @objc func saveButtonTapped( _ sender: UIButton) {
+        print("booom ba yah")
+        guard let delegate = self.delegate else { return }
+        
+        if let text = self.supportingAnswerView.getTextArea().text {
+            let trimmedText = text.trimmingCharacters(
+                in: CharacterSet.whitespacesAndNewlines
+            )
+            
+            switch !trimmedText.isEmpty {
+            case true:
+                self.model.supportingAnswer = trimmedText
+                self.model.isEditInput = true
+                delegate.saveTapped(on: self.sectionIndex)
+            case false:
+                break
+            }
+            
+        }
+    }
+}
+
+// MARK: - TextAreaViewDelegate Methods
+extension ItemWithTextInputCell: TextAreaViewDelegate {
+    
+    public func textAreaViewDidChange(_ textView: UITextView) {
+        self.saveButton.isHidden = false
+    }
+    
+    public func textAreaViewShouldReturn(_ textView: UITextView) -> Bool {
+        self.saveButton.isHidden = true
+        return true
     }
 }

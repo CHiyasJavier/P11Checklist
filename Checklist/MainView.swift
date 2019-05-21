@@ -17,7 +17,6 @@ public final class MainView: UIView {
         view.backgroundColor = UIColor.white
         view.showsVerticalScrollIndicator = true
         view.allowsSelection = false
-        view.estimatedRowHeight = 180.0
         view.rowHeight = UITableView.automaticDimension
         view.separatorColor = UIColor.clear
         return view
@@ -111,7 +110,7 @@ extension MainView: UITableViewDataSource {
         else { return UITableViewCell() }
         
         let sectionInfo = self.sectionInfoList[indexPath.section]
-        cell.configure(with: sectionInfo)
+        cell.configure(with: sectionInfo, delegate: self, sectionIndex: indexPath.section)
         return cell
     }
 }
@@ -138,7 +137,7 @@ extension MainView: UITableViewDelegate {
             
             switch expandedSection.count > 0 && sectionInfo.isExpanded == false {
             case true:
-                checklistWithAsnwerHeaderView.hasMasked()
+                checklistWithAsnwerHeaderView.addMasking()
             case false:
                 checklistWithAsnwerHeaderView.removeMasking()
             }
@@ -160,7 +159,7 @@ extension MainView: UITableViewDelegate {
             
             switch expandedSection.count > 0 && sectionInfo.isExpanded == false {
             case true:
-                checklistItemHeaderView.hasMasked()
+                checklistItemHeaderView.addMasking()
             case false:
                 checklistItemHeaderView.removeMasking()
             }
@@ -178,7 +177,7 @@ extension MainView: UITableViewDelegate {
     }
     
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100.0
+        return 120.0
     }
 
 }
@@ -207,3 +206,19 @@ extension MainView: ChecklistWithAnswerHeaderViewDelegate {
         self.tableView.reloadData()
     }
 }
+
+extension MainView: ItemWithTextInputCellDelegate {
+    public func saveTapped(on sectionIndex: Int) {
+        let sectionInfo: SectionInfo = self.sectionInfoList[sectionIndex]
+        switch sectionInfo.isExpanded {
+        case true:
+            sectionInfo.isExpanded = false
+            sectionInfo.isEditInput = true
+        case false:
+            sectionInfo.isExpanded = true
+            sectionInfo.isEditInput = false
+        }
+        self.tableView.reloadData()
+    }
+}
+

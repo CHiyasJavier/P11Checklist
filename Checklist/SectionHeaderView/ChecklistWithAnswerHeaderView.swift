@@ -24,7 +24,7 @@ class ChecklistWithAnswerHeaderView: UITableViewHeaderFooterView {
     
     private let itemLabel: UILabel = {
         let view: UILabel = UILabel()
-        view.font = UIFont.boldSystemFont(ofSize: 20.0)
+        view.font = UIFont.boldSystemFont(ofSize: 16.0)
         view.textColor = UIColor(red: 0.35, green: 0.35, blue: 0.35, alpha: 1.0)
         view.numberOfLines = 0
         view.textAlignment = NSTextAlignment.left
@@ -47,14 +47,29 @@ class ChecklistWithAnswerHeaderView: UITableViewHeaderFooterView {
     private let editButton: UIButton = {
         let view: UIButton = UIButton(type: UIButton.ButtonType.custom)
         view.setTitle("Edit", for: UIControl.State.normal)
-        view.setTitleColor(UIColor(red: 0.51, green: 0.60, blue: 0.63, alpha: 1.0), for: UIControl.State.normal)
-        view.addTarget(self, action: #selector(ChecklistWithAnswerHeaderView.didTap), for: UIControl.Event.touchUpInside)
+        view.setTitleColor(
+            UIColor(red: 0.51, green: 0.60, blue: 0.63, alpha: 1.0),
+            for: UIControl.State.normal
+        )
+        view.addTarget(
+            self,
+            action: #selector(ChecklistWithAnswerHeaderView.didTap),
+            for: UIControl.Event.touchUpInside
+        )
         return view
     }()
     
     public let maskingView: UIView = {
         let view: UIView = UIView()
-        view.backgroundColor = UIColor.white.withAlphaComponent(0.7)
+        view.backgroundColor = UIColor.white.withAlphaComponent(0.9)
+        return view
+    }()
+    
+    private lazy var blurEffectView: UIVisualEffectView = {
+        let blurEffect: UIBlurEffect = UIBlurEffect(style: UIBlurEffect.Style.regular)
+        let view = UIVisualEffectView(effect: blurEffect)
+        view.frame = self.bounds
+        view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         return view
     }()
 
@@ -104,7 +119,6 @@ extension ChecklistWithAnswerHeaderView {
     }
 }
 
-
 // MARK: - Public APIs
 extension ChecklistWithAnswerHeaderView {
     public static var identifier: String = "ChecklistWithAnswerHeaderView"
@@ -121,8 +135,9 @@ extension ChecklistWithAnswerHeaderView {
         self.section = section
     }
     
-    public func hasMasked() {
-        self.subview(forAutoLayout: self.maskingView)
+    public func addMasking() {
+        
+        self.subviews(forAutoLayout: [self.maskingView])
         
         self.maskingView.snp.remakeConstraints { (make: ConstraintMaker) in
             make.edges.equalToSuperview()

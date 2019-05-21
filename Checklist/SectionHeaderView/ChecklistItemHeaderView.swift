@@ -36,7 +36,7 @@ public class ChecklistItemHeaderView: UITableViewHeaderFooterView {
     
     public let maskingView: UIView = {
         let view: UIView = UIView()
-        view.backgroundColor = UIColor.white.withAlphaComponent(0.7)
+        view.backgroundColor = UIColor.white.withAlphaComponent(0.9)
         return view
     }()
     
@@ -87,7 +87,7 @@ extension ChecklistItemHeaderView {
         self.section = section
     }
     
-    public func hasMasked() {
+    public func addMasking() {
         self.subview(forAutoLayout: self.maskingView)
         
         self.maskingView.snp.remakeConstraints { (make: ConstraintMaker) in
