@@ -23,6 +23,7 @@ public class SectionInfo: NSObject {
     public var items: [Any] = []
     public var isExpanded: Bool = false
     public var addOn: Any?
+    public var isEditInput: Bool = false
     
 }
 

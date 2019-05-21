@@ -41,6 +41,8 @@ public final class MainView: UIView {
             ChecklistItemHeaderView.self,
             forHeaderFooterViewReuseIdentifier: ChecklistItemHeaderView.identifier)
         
+        self.tableView.register(ChecklistWithAnswerHeaderView.self, forHeaderFooterViewReuseIdentifier: ChecklistWithAnswerHeaderView.identifier)
+        
         self.tableView.snp.remakeConstraints { (make: ConstraintMaker) in
             make.top.equalTo(safeAreaLayoutGuide.snp.topMargin)
             make.leading.equalToSuperview()
@@ -55,7 +57,13 @@ public final class MainView: UIView {
         let sectionInfoA: SectionInfo = SectionInfo(section: 0, title: "Section 0", items: ["A", "B", "C"])
         let sectionInfoB: SectionInfo = SectionInfo(section: 1, title: "Section 1", items: ["A", "B", "C"])
         let sectionInfoC: SectionInfo = SectionInfo(section: 2, title: "Section 2", items: ["A", "B", "C"])
-        sectionInfoList = [sectionInfoA, sectionInfoB, sectionInfoC]
+        let sectionInfoD: SectionInfo = SectionInfo(section: 2, title: "Section 2", items: ["A", "B", "C"])
+        sectionInfoD.isEditInput = true
+        let sectionInfoE: SectionInfo = SectionInfo(section: 2, title: "Section 2", items: ["A", "B", "C"])
+        sectionInfoE.isEditInput = true
+        let sectionInfoF: SectionInfo = SectionInfo(section: 2, title: "Section 2", items: ["A", "B", "C"])
+        sectionInfoF.isEditInput = true
+        sectionInfoList = [sectionInfoA, sectionInfoB, sectionInfoC, sectionInfoD, sectionInfoE, sectionInfoF]
         
     }
     
@@ -98,36 +106,60 @@ extension MainView: UITableViewDataSource {
 extension MainView: UITableViewDelegate {
    
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard
-            let checklistItemHeaderView: ChecklistItemHeaderView = self.tableView.dequeueReusableHeaderFooterView(
-                withIdentifier: ChecklistItemHeaderView.identifier
-            ) as? ChecklistItemHeaderView
+        let sectionInfo = self.sectionInfoList[section]
+        if sectionInfo.isEditInput {
+            guard
+                let checklistWithAsnwerHeaderView: ChecklistWithAnswerHeaderView = self.tableView.dequeueReusableHeaderFooterView(
+                    withIdentifier: ChecklistWithAnswerHeaderView.identifier
+                    ) as? ChecklistWithAnswerHeaderView
+                else { return UIView() }
             
-        else { return UIView() }
-
-        let sectionInfo: SectionInfo = self.sectionInfoList[section]
-        
-        
-        checklistItemHeaderView.setTitle(sectionInfo.title ?? "")
-        checklistItemHeaderView.setSection(section)
-        checklistItemHeaderView.delegate = self
-        checklistItemHeaderView.checkboxButton.isSelected = sectionInfo.isExpanded
-        
-        checklistItemHeaderView.backgroundColor = UIColor.green.withAlphaComponent(0.5)
-        
-        let expandedSection: [SectionInfo] = self.sectionInfoList.filter({ $0.isExpanded} )
-        
-        switch expandedSection.count > 0 && sectionInfo.isExpanded == false {
-        case true:
-            checklistItemHeaderView.hasMasked()
-        case false:
-            checklistItemHeaderView.removeMasking()
+            checklistWithAsnwerHeaderView.setTitle(sectionInfo.title ?? "")
+            checklistWithAsnwerHeaderView.setSubTitle("Answer")
+            checklistWithAsnwerHeaderView.setSection(section)
+            checklistWithAsnwerHeaderView.delegate = self
+            
+            let expandedSection: [SectionInfo] = self.sectionInfoList.filter({ $0.isExpanded} )
+            
+            switch expandedSection.count > 0 && sectionInfo.isExpanded == false {
+            case true:
+                checklistWithAsnwerHeaderView.hasMasked()
+            case false:
+                checklistWithAsnwerHeaderView.removeMasking()
+            }
+            
+            return checklistWithAsnwerHeaderView
+        } else {
+            guard
+                let checklistItemHeaderView: ChecklistItemHeaderView = self.tableView.dequeueReusableHeaderFooterView(
+                    withIdentifier: ChecklistItemHeaderView.identifier
+                    ) as? ChecklistItemHeaderView
+                
+                else { return UIView() }
+            
+            checklistItemHeaderView.setTitle(sectionInfo.title ?? "")
+            checklistItemHeaderView.setSection(section)
+            checklistItemHeaderView.delegate = self
+            checklistItemHeaderView.checkboxButton.isSelected = sectionInfo.isExpanded
+            
+            let expandedSection: [SectionInfo] = self.sectionInfoList.filter({ $0.isExpanded} )
+            
+            switch expandedSection.count > 0 && sectionInfo.isExpanded == false {
+            case true:
+                checklistItemHeaderView.hasMasked()
+            case false:
+                checklistItemHeaderView.removeMasking()
+            }
+            
+            return checklistItemHeaderView
         }
-
-        return checklistItemHeaderView
     }
     
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        let sectionInfo = self.sectionInfoList[section]
+        if sectionInfo.isEditInput {
+            return 70.0
+        }
         return 35.0
     }
 
@@ -142,4 +174,20 @@ extension MainView: ChecklistItemHeaderViewDelegate {
     }
     
     
+}
+
+extension MainView: ChecklistWithAnswerHeaderViewDelegate {
+    
+    public func didTap(_ section: Int) {
+        let sectionInfo: SectionInfo = self.sectionInfoList[section]
+        switch sectionInfo.isExpanded {
+        case true:
+            sectionInfo.isExpanded = false
+            sectionInfo.isEditInput = true
+        case false:
+            sectionInfo.isExpanded = true
+            sectionInfo.isEditInput = false
+        }
+        self.tableView.reloadData()
+    }
 }

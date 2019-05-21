@@ -7,3 +7,7 @@
 //
 
 import Foundation
+
+public protocol ChecklistWithAnswerHeaderViewDelegate: class {
+    func didTap(_ section: Int)
+}
