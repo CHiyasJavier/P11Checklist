@@ -29,6 +29,9 @@
 		8165AD742293B26600CE5426 /* AppUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8165AD732293B26600CE5426 /* AppUI.swift */; };
 		8165AD762293B31000CE5426 /* FieldState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8165AD752293B31000CE5426 /* FieldState.swift */; };
 		8165AD782293E67A00CE5426 /* ItemWithTextInputCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8165AD772293E67A00CE5426 /* ItemWithTextInputCellDelegate.swift */; };
+		8165AD7B229402A100CE5426 /* ThoughtView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8165AD7A229402A100CE5426 /* ThoughtView.swift */; };
+		8165AD7D229402DD00CE5426 /* ThoughtAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8165AD7C229402DD00CE5426 /* ThoughtAnimation.swift */; };
+		8165AD802294030300CE5426 /* ThoughtViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8165AD7F2294030300CE5426 /* ThoughtViewDelegate.swift */; };
 		E906088FC26484AD45454B18 /* Pods_ChecklistUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00A61467FDD3403C68613CDD /* Pods_ChecklistUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -80,6 +83,9 @@
 		8165AD732293B26600CE5426 /* AppUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUI.swift; sourceTree = "<group>"; };
 		8165AD752293B31000CE5426 /* FieldState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldState.swift; sourceTree = "<group>"; };
 		8165AD772293E67A00CE5426 /* ItemWithTextInputCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemWithTextInputCellDelegate.swift; sourceTree = "<group>"; };
+		8165AD7A229402A100CE5426 /* ThoughtView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThoughtView.swift; sourceTree = "<group>"; };
+		8165AD7C229402DD00CE5426 /* ThoughtAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThoughtAnimation.swift; sourceTree = "<group>"; };
+		8165AD7F2294030300CE5426 /* ThoughtViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThoughtViewDelegate.swift; sourceTree = "<group>"; };
 		B086928AB1C2C030F38C19C7 /* Pods-ChecklistTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChecklistTests.debug.xcconfig"; path = "Target Support Files/Pods-ChecklistTests/Pods-ChecklistTests.debug.xcconfig"; sourceTree = "<group>"; };
 		B6AAB86363BCE1DABF077713 /* Pods-ChecklistTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChecklistTests.release.xcconfig"; path = "Target Support Files/Pods-ChecklistTests/Pods-ChecklistTests.release.xcconfig"; sourceTree = "<group>"; };
 		BE7C9BBB767EE937B9938E7A /* Pods-Checklist.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Checklist.debug.xcconfig"; path = "Target Support Files/Pods-Checklist/Pods-Checklist.debug.xcconfig"; sourceTree = "<group>"; };
@@ -244,6 +250,7 @@
 		8165AD6D2293B0C900CE5426 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				8165AD792294028D00CE5426 /* ToolTip */,
 				8165AD6E2293B0E600CE5426 /* TextAreaView.swift */,
 				8165AD702293B10500CE5426 /* TextAreaViewDelegate.swift */,
 			);
@@ -256,6 +263,24 @@
 				8165AD732293B26600CE5426 /* AppUI.swift */,
 			);
 			path = Enums;
+			sourceTree = "<group>";
+		};
+		8165AD792294028D00CE5426 /* ToolTip */ = {
+			isa = PBXGroup;
+			children = (
+				8165AD7E229402F000CE5426 /* Protocols */,
+				8165AD7A229402A100CE5426 /* ThoughtView.swift */,
+				8165AD7C229402DD00CE5426 /* ThoughtAnimation.swift */,
+			);
+			path = ToolTip;
+			sourceTree = "<group>";
+		};
+		8165AD7E229402F000CE5426 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				8165AD7F2294030300CE5426 /* ThoughtViewDelegate.swift */,
+			);
+			path = Protocols;
 			sourceTree = "<group>";
 		};
 		ECF2F5C69B3F651B5415B2FD /* Frameworks */ = {
@@ -495,6 +520,7 @@
 			files = (
 				648EBEA2228E7BB500B7AEAA /* MainVC.swift in Sources */,
 				8165AD782293E67A00CE5426 /* ItemWithTextInputCellDelegate.swift in Sources */,
+				8165AD802294030300CE5426 /* ThoughtViewDelegate.swift in Sources */,
 				648EBECE228E7DFD00B7AEAA /* ChecklistWithAnswerHeaderView.swift in Sources */,
 				8165AD762293B31000CE5426 /* FieldState.swift in Sources */,
 				8165AD6F2293B0E600CE5426 /* TextAreaView.swift in Sources */,
@@ -507,8 +533,10 @@
 				6403648222923EEE0092C497 /* SectionInfo.swift in Sources */,
 				6403648522924DCB0092C497 /* ItemWithTextInputCell.swift in Sources */,
 				8165AD742293B26600CE5426 /* AppUI.swift in Sources */,
+				8165AD7D229402DD00CE5426 /* ThoughtAnimation.swift in Sources */,
 				648EBED7228E803300B7AEAA /* ChecklistItemHeaderViewDelegate.swift in Sources */,
 				648EBED0228E7E1900B7AEAA /* ChecklistItemHeaderView.swift in Sources */,
+				8165AD7B229402A100CE5426 /* ThoughtView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -677,7 +705,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = L2SXWB2TAK;
+				DEVELOPMENT_TEAM = N36VWJBV53;
 				INFOPLIST_FILE = Checklist/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -696,7 +724,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = L2SXWB2TAK;
+				DEVELOPMENT_TEAM = N36VWJBV53;
 				INFOPLIST_FILE = Checklist/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

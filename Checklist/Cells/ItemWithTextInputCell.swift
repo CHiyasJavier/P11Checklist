@@ -40,27 +40,64 @@ public class ItemWithTextInputCell: UITableViewCell {
         return view
     }()
     
+    public let toolTipButton: UIButton = {
+        let view: UIButton = UIButton()
+        view.setTitle("Why are we asking this?", for: UIControl.State.normal)
+        view.setTitleColor(
+            AppUI.Theme.buttonColor,
+            for: UIControl.State.normal
+        )
+        view.titleLabel?.font = UIFont.systemFont(
+            ofSize: 12.0,
+            weight: UIFont.Weight.semibold
+        )
+        view.isHidden = false
+        return view
+    }()
+    
+    public let toolTip: ThoughtView = {
+        let view: ThoughtView = ThoughtView()
+        view.backgroundColor = UIColor.white
+        view.withClose()
+//        view.withClose(accesory: #imageLiteral(resourceName: "close-icon"), size: 20.0)
+        return view
+    }()
+    
     // MARK: Initializers
     public override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.backgroundColor = UIColor.clear
         
         self.subviews(forAutoLayout: [
-            self.supportingAnswerView, self.saveButton
+            self.supportingAnswerView, self.saveButton,
+            self.toolTipButton, self.toolTip
         ])
         
-        self.supportingAnswerView.snp.remakeConstraints { [unowned self] (make: ConstraintMaker) -> Void in
+        self.supportingAnswerView.snp.remakeConstraints { (make: ConstraintMaker) -> Void in
             make.top.equalToSuperview().offset(20.0)
             make.trailing.equalToSuperview().inset(20.0)
             make.leading.equalToSuperview().offset(20.0)
-            make.bottom.equalTo(self.saveButton.snp.top).inset(5.0)
+            make.height.equalTo(70.0)
         }
         
-        self.saveButton.snp.remakeConstraints { (make: ConstraintMaker) in
+        self.saveButton.snp.remakeConstraints { [unowned self] (make: ConstraintMaker) in
             make.trailing.equalToSuperview().inset(20.0)
             make.width.equalTo(35.0)
             make.height.equalTo(20.0)
-            make.bottom.equalToSuperview()
+            make.top.equalTo(self.supportingAnswerView.snp.bottom).offset(5.0)
+        }
+        
+        self.toolTipButton.snp.remakeConstraints { [unowned self] (make: ConstraintMaker) in
+            make.trailing.equalToSuperview().inset(20.0)
+            make.height.equalTo(20.0)
+            make.top.equalTo(self.supportingAnswerView.snp.bottom).offset(5.0)
+        }
+        
+        self.toolTip.snp.remakeConstraints { (make: ConstraintMaker) -> Void in
+            make.top.equalTo(self.supportingAnswerView.snp.bottom).offset(10.0)
+            self.toolTipHeight = make.height.equalTo(60.0).constraint
+            make.leading.equalToSuperview().offset(20.0)
+            make.trailing.equalToSuperview().inset(20.0)
         }
         
         let tapGesture = UITapGestureRecognizer(
@@ -74,6 +111,12 @@ public class ItemWithTextInputCell: UITableViewCell {
             for: UIControl.Event.touchUpInside
         )
         
+        self.toolTipButton.addTarget(
+            self,
+            action: #selector(ItemWithTextInputCell.toolTipButtonTapped),
+            for: UIControl.Event.touchUpInside
+        )
+        
         self.supportingAnswerView.getTextArea().addGestureRecognizer(tapGesture)
         self.supportingAnswerView.delegate = self
     }
@@ -82,8 +125,30 @@ public class ItemWithTextInputCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        self.toolTip.withShadow()
+        
+        let message: String = "Au Revoir, Chienne  Chienne  Chienne  Chienne  Chienne  Chienne  Chienne  Chienne  Chienne  Chienne  Chienne  Chienne  Chienne  Chienne  Chienne  Chienne  Chienne  Chienne  Chienne  Chienne  Chienne  Chienne  Chienne  Chienne  Chienne  Chienne  Chienne  Chienne  Chienne  Chienne  Chienne "
+        
+        self.toolTip.setMessage(message, color: UIColor.black)
+        
+        let height: CGFloat = message.height(
+            withConstrainedWidth: 300.0,
+            font: UIFont.systemFont(ofSize: 14.0, weight: UIFont.Weight.semibold)
+        )
+        
+        self.toolTipHeight.update(offset: height + 20)
+        self.toolTip.setViewRadius(radius: 9.0)
+        
+        self.setNeedsLayout()
+    }
+    
+    // MARK: - Stored Properties
     private var model: SectionInfo!
     private var sectionIndex: Int!
+    private var toolTipHeight: Constraint!
     
 }
 
@@ -107,7 +172,7 @@ extension ItemWithTextInputCell {
     }
     
     @objc func saveButtonTapped( _ sender: UIButton) {
-        print("booom ba yah")
+        
         guard let delegate = self.delegate else { return }
         
         if let text = self.supportingAnswerView.getTextArea().text {
@@ -126,6 +191,10 @@ extension ItemWithTextInputCell {
             
         }
     }
+    
+    @objc func toolTipButtonTapped( _ sender: UIButton) {
+        
+    }
 }
 
 // MARK: - TextAreaViewDelegate Methods
@@ -133,6 +202,7 @@ extension ItemWithTextInputCell: TextAreaViewDelegate {
     
     public func textAreaViewDidChange(_ textView: UITextView) {
         self.saveButton.isHidden = false
+        self.toolTipButton.isHidden = true
     }
     
     public func textAreaViewShouldReturn(_ textView: UITextView) -> Bool {

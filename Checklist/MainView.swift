@@ -177,7 +177,7 @@ extension MainView: UITableViewDelegate {
     }
     
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 120.0
+        return 300.0
     }
 
 }
@@ -208,6 +208,7 @@ extension MainView: ChecklistWithAnswerHeaderViewDelegate {
 }
 
 extension MainView: ItemWithTextInputCellDelegate {
+    
     public func saveTapped(on sectionIndex: Int) {
         let sectionInfo: SectionInfo = self.sectionInfoList[sectionIndex]
         switch sectionInfo.isExpanded {
