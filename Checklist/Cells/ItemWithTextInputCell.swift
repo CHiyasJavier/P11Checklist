@@ -22,17 +22,40 @@ public class ItemWithTextInputCell: UITableViewCell {
         return view
     }()
     
+    public let saveButton: UIButton = {
+        let view: UIButton = UIButton()
+        view.setTitle("SAVE", for: UIControl.State.normal)
+        view.setTitleColor(
+            AppUI.Theme.buttonColor,
+            for: UIControl.State.normal
+        )
+        view.titleLabel?.font = UIFont.systemFont(
+            ofSize: 12.0,
+            weight: UIFont.Weight.semibold
+        )
+        return view
+    }()
+    
     // MARK: Initializers
     public override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.backgroundColor = UIColor.clear
         
-        self.subviews(forAutoLayout: [self.supportingAnswerView])
+        self.subviews(forAutoLayout: [
+            self.supportingAnswerView, self.saveButton
+        ])
         
-        self.supportingAnswerView.snp.remakeConstraints { (make: ConstraintMaker) -> Void in
+        self.supportingAnswerView.snp.remakeConstraints { [unowned self] (make: ConstraintMaker) -> Void in
             make.top.equalToSuperview()
             make.trailing.equalToSuperview().inset(20.0)
             make.leading.equalToSuperview().offset(20.0)
+            make.bottom.equalTo(self.saveButton.snp.top)
+        }
+        
+        self.saveButton.snp.remakeConstraints { (make: ConstraintMaker) in
+            make.trailing.equalToSuperview().inset(20.0)
+            make.width.equalTo(35.0)
+            make.height.equalTo(20.0)
             make.bottom.equalToSuperview()
         }
         
@@ -64,8 +87,6 @@ extension ItemWithTextInputCell {
 extension ItemWithTextInputCell {
     
     @objc func didRecognizeTapGesture(_ gesture: UITapGestureRecognizer) {
-        print("boom")
         self.supportingAnswerView.getTextArea().becomeFirstResponder()
     }
-    
 }

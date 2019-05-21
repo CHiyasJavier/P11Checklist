@@ -17,7 +17,7 @@ public final class MainView: UIView {
         view.backgroundColor = UIColor.white
         view.showsVerticalScrollIndicator = true
         view.allowsSelection = false
-        view.estimatedRowHeight = 100.0
+        view.estimatedRowHeight = 180.0
         view.rowHeight = UITableView.automaticDimension
         view.separatorColor = UIColor.clear
         return view
@@ -175,6 +175,10 @@ extension MainView: UITableViewDelegate {
             return 70.0
         }
         return 35.0
+    }
+    
+    public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 100.0
     }
 
 }
