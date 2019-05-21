@@ -11,9 +11,11 @@ import Foundation
 public class SectionInfo: NSObject {
     
     // MARK: - Initializers
-    init(title: String, items: [Any]) {
+    init(title: String, items: [Any], withInput supportingAnswer: String = "", isEditInput: Bool = false) {
         self.title = title
         self.items = items
+        self.supportingAnswer = supportingAnswer
+        self.isEditInput = isEditInput
     }
     
     // MARK: - Stored Properties
@@ -21,6 +23,6 @@ public class SectionInfo: NSObject {
     public var items: [Any] = []
     public var isExpanded: Bool = false
     public var addOn: Any?
-    public var isEditInput: Bool = false
-    
+    public var isEditInput: Bool
+    public var supportingAnswer: String
 }

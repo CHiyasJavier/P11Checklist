@@ -57,14 +57,27 @@ public final class MainView: UIView {
         let sectionInfoA: SectionInfo = SectionInfo(title: "Section 0", items: ["A", "B", "C"])
         let sectionInfoB: SectionInfo = SectionInfo(title: "Section 1", items: ["A", "B", "C"])
         let sectionInfoC: SectionInfo = SectionInfo(title: "Section 2", items: ["A", "B", "C"])
-        let sectionInfoD: SectionInfo = SectionInfo(title: "Section 2", items: ["A", "B", "C"])
-        sectionInfoD.isEditInput = true
-        let sectionInfoE: SectionInfo = SectionInfo(title: "Section 2", items: ["A", "B", "C"])
-        sectionInfoE.isEditInput = true
-        let sectionInfoF: SectionInfo = SectionInfo(title: "Section 2", items: ["A", "B", "C"])
-        sectionInfoF.isEditInput = true
-        self.sectionInfoList = [sectionInfoA, sectionInfoB, sectionInfoC, sectionInfoD, sectionInfoE, sectionInfoF]
+        let sectionInfoD: SectionInfo = SectionInfo(
+            title: "Section 3",
+            items: ["A", "B", "C"],
+            withInput: "Je suis génial 1",
+            isEditInput: true
+        )
         
+        let sectionInfoE: SectionInfo = SectionInfo(
+            title: "Section 4",
+            items: ["A", "B", "C"],
+            withInput: "Je suis génial 2",
+            isEditInput: true
+        )
+        
+        let sectionInfoF: SectionInfo = SectionInfo(
+            title: "Section 5",
+            items: ["A", "B", "C"],
+            withInput: "Je suis génial 3",
+            isEditInput: true
+        )
+        self.sectionInfoList = [sectionInfoA, sectionInfoB, sectionInfoC, sectionInfoD, sectionInfoE, sectionInfoF]
     }
     
     public required init?(coder aDecoder: NSCoder) {
@@ -96,18 +109,20 @@ extension MainView: UITableViewDataSource {
                 for: indexPath
                 ) as? ItemWithTextInputCell
         else { return UITableViewCell() }
-
+        
+        let sectionInfo = self.sectionInfoList[indexPath.section]
+        cell.configure(with: sectionInfo)
         return cell
     }
-    
-    
 }
 
 extension MainView: UITableViewDelegate {
    
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let sectionInfo = self.sectionInfoList[section]
-        if sectionInfo.isEditInput {
+        
+        switch sectionInfo.isEditInput {
+        case true:
             guard
                 let checklistWithAsnwerHeaderView: ChecklistWithAnswerHeaderView = self.tableView.dequeueReusableHeaderFooterView(
                     withIdentifier: ChecklistWithAnswerHeaderView.identifier
@@ -115,7 +130,7 @@ extension MainView: UITableViewDelegate {
             else { return UIView() }
             
             checklistWithAsnwerHeaderView.setTitle(sectionInfo.title ?? "")
-            checklistWithAsnwerHeaderView.setSubTitle("Answer")
+            checklistWithAsnwerHeaderView.setSubTitle(sectionInfo.supportingAnswer)
             checklistWithAsnwerHeaderView.setSection(section)
             checklistWithAsnwerHeaderView.delegate = self
             
@@ -129,7 +144,7 @@ extension MainView: UITableViewDelegate {
             }
             
             return checklistWithAsnwerHeaderView
-        } else {
+        case false:
             guard
                 let checklistItemHeaderView: ChecklistItemHeaderView = self.tableView.dequeueReusableHeaderFooterView(
                     withIdentifier: ChecklistItemHeaderView.identifier
@@ -171,8 +186,6 @@ extension MainView: ChecklistItemHeaderViewDelegate {
         sectionInfo.isExpanded.toggle()
         self.tableView.reloadData()
     }
-    
-    
 }
 
 extension MainView: ChecklistWithAnswerHeaderViewDelegate {

@@ -22,10 +22,16 @@ public class ItemWithTextInputCell: UITableViewCell {
         self.backgroundColor = UIColor.red
     }
     
+    private var model: SectionInfo!
+    
 }
 
 // MARK: - Public APIs
 extension ItemWithTextInputCell {
     public static var identifier: String = "ItemWithTextInputCell"
+    
+    public func configure(with model: SectionInfo) {
+        self.model = model
+    }
     
 }
