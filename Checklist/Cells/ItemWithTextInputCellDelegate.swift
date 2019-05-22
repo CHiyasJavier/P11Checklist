@@ -10,4 +10,5 @@ import Foundation
 
 public protocol ItemWithTextInputCellDelegate: class {
     func saveTapped(on sectionIndex: Int)
+    func cancelTapped(on sectionIndex: Int)
 }

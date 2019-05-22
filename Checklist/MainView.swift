@@ -187,6 +187,14 @@ extension MainView: ChecklistItemHeaderViewDelegate {
     public func didToggleCheckbox(_ section: Int) {
         let sectionInfo: SectionInfo = self.sectionInfoList[section]
         sectionInfo.isExpanded.toggle()
+        
+        switch !sectionInfo.supportingAnswer.isEmpty {
+        case true:
+            sectionInfo.supportingAnswer = ""
+        case false:
+            break
+        }
+        
         self.tableView.reloadData()
     }
 }
@@ -208,6 +216,12 @@ extension MainView: ChecklistWithAnswerHeaderViewDelegate {
 }
 
 extension MainView: ItemWithTextInputCellDelegate {
+    public func cancelTapped(on sectionIndex: Int) {
+        let sectionInfo: SectionInfo = self.sectionInfoList[sectionIndex]
+        sectionInfo.isExpanded = false
+        self.tableView.reloadData()
+    }
+    
     
     public func saveTapped(on sectionIndex: Int) {
         let sectionInfo: SectionInfo = self.sectionInfoList[sectionIndex]

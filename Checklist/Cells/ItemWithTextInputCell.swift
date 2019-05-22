@@ -27,7 +27,22 @@ public class ItemWithTextInputCell: UITableViewCell {
     
     public let saveButton: UIButton = {
         let view: UIButton = UIButton()
-        view.setTitle("SAVE", for: UIControl.State.normal)
+        view.setTitle("Save", for: UIControl.State.normal)
+        view.setTitleColor(
+            UIColor.blue,
+            for: UIControl.State.normal
+        )
+        view.titleLabel?.font = UIFont.systemFont(
+            ofSize: 12.0,
+            weight: UIFont.Weight.semibold
+        )
+        view.isHidden = true
+        return view
+    }()
+    
+    public let cancelButton: UIButton = {
+        let view: UIButton = UIButton()
+        view.setTitle("Cancel", for: UIControl.State.normal)
         view.setTitleColor(
             AppUI.Theme.buttonColor,
             for: UIControl.State.normal
@@ -59,7 +74,6 @@ public class ItemWithTextInputCell: UITableViewCell {
         let view: ThoughtView = ThoughtView()
         view.backgroundColor = UIColor.white
         view.isHidden = true
-//        view.withClose(accesory: #imageLiteral(resourceName: "close-icon"), size: 20.0)
         return view
     }()
     
@@ -69,22 +83,31 @@ public class ItemWithTextInputCell: UITableViewCell {
         self.backgroundColor = UIColor.clear
         
         self.subviews(forAutoLayout: [
-            self.supportingAnswerView, self.saveButton,
-            self.toolTipButton, self.toolTip
+            self.supportingAnswerView,self.cancelButton,
+             self.saveButton, self.toolTipButton,
+            self.toolTip
         ])
         
         self.supportingAnswerView.snp.remakeConstraints { (make: ConstraintMaker) -> Void in
             make.top.equalToSuperview().offset(20.0)
             make.trailing.equalToSuperview().inset(20.0)
             make.leading.equalToSuperview().offset(20.0)
+            
             make.height.equalTo(70.0)
         }
         
         self.saveButton.snp.remakeConstraints { [unowned self] (make: ConstraintMaker) in
-            make.trailing.equalToSuperview().inset(20.0)
-            make.width.equalTo(35.0)
+            make.trailing.equalToSuperview()
             make.height.equalTo(20.0)
+            make.width.equalTo(80.0)
             make.top.equalTo(self.supportingAnswerView.snp.bottom).offset(5.0)
+        }
+        
+        self.cancelButton.snp.remakeConstraints { [unowned self] (make: ConstraintMaker) -> Void in
+            make.top.equalTo(self.saveButton)
+            make.height.equalTo(20.0)
+            make.width.equalTo(80.0)
+            make.trailing.equalTo(self.saveButton.snp.leading).inset(20.0)
         }
         
         self.toolTipButton.snp.remakeConstraints { [unowned self] (make: ConstraintMaker) in
@@ -116,6 +139,8 @@ public class ItemWithTextInputCell: UITableViewCell {
             action: #selector(ItemWithTextInputCell.toolTipButtonTapped),
             for: UIControl.Event.touchUpInside
         )
+        
+        self.cancelButton.addTarget(self, action: #selector(ItemWithTextInputCell.cancelButtonTapped), for: UIControl.Event.touchUpInside)
         
         self.supportingAnswerView.getTextArea().addGestureRecognizer(tapGesture)
         self.supportingAnswerView.delegate = self
@@ -162,6 +187,17 @@ extension ItemWithTextInputCell {
         self.sectionIndex = sectionIndex
         
         self.supportingAnswerView.getTextArea().text = self.model.supportingAnswer
+        
+        switch self.model.supportingAnswer.isEmpty {
+        case true:
+             self.saveButton.isHidden = true
+             self.cancelButton.isHidden = true
+             self.toolTipButton.isHidden = false
+        case false:
+            self.saveButton.isHidden = false
+            self.cancelButton.isHidden = false
+            self.toolTipButton.isHidden = true
+        }
     }
 }
 
@@ -169,6 +205,8 @@ extension ItemWithTextInputCell {
     
     @objc func didRecognizeTapGesture( _ gesture: UITapGestureRecognizer) {
         self.supportingAnswerView.getTextArea().becomeFirstResponder()
+        self.cancelButton.isHidden = false
+        self.toolTipButton.isHidden = true
     }
     
     @objc func saveButtonTapped( _ sender: UIButton) {
@@ -195,14 +233,51 @@ extension ItemWithTextInputCell {
     @objc func toolTipButtonTapped( _ sender: UIButton) {
         self.toolTip.isHidden = false
     }
+    
+    @objc func cancelButtonTapped( _ sender: UIButton) {
+        guard let delegate = self.delegate else { return }
+        
+        if let index = self.sectionIndex {            
+            if let text = self.supportingAnswerView.getTextArea().text {
+                let trimmedText = text.trimmingCharacters(
+                    in: CharacterSet.whitespacesAndNewlines
+                )
+                
+                switch !trimmedText.isEmpty && !self.model.supportingAnswer.isEmpty {
+                case true:
+                    self.model.supportingAnswer = trimmedText
+                    self.model.isEditInput = true
+                    delegate.cancelTapped(on: index)
+                case false:
+                    delegate.cancelTapped(on: index)
+                }
+            }
+        }
+    }
 }
 
 // MARK: - TextAreaViewDelegate Methods
 extension ItemWithTextInputCell: TextAreaViewDelegate {
     
     public func textAreaViewDidChange(_ textView: UITextView) {
-        self.saveButton.isHidden = false
-        self.toolTipButton.isHidden = true
+        
+        if let text = textView.text {
+            let trimmedText = text.trimmingCharacters(
+                in: CharacterSet.whitespacesAndNewlines
+            )
+            
+            switch !trimmedText.isEmpty {
+            case true:
+                self.saveButton.isHidden = false
+                self.cancelButton.isHidden = false
+                self.toolTipButton.isHidden = true
+            case false:
+                self.saveButton.isHidden = true
+                self.cancelButton.isHidden = true
+                self.toolTipButton.isHidden = false
+            }
+        }
+        
     }
     
     public func textAreaViewShouldReturn(_ textView: UITextView) -> Bool {
