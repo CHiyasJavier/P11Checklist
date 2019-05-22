@@ -58,7 +58,7 @@ public class ItemWithTextInputCell: UITableViewCell {
     public let toolTip: ThoughtView = {
         let view: ThoughtView = ThoughtView()
         view.backgroundColor = UIColor.white
-        view.withClose()
+        view.isHidden = true
 //        view.withClose(accesory: #imageLiteral(resourceName: "close-icon"), size: 20.0)
         return view
     }()
@@ -141,8 +141,8 @@ public class ItemWithTextInputCell: UITableViewCell {
         
         self.toolTipHeight.update(offset: height + 20)
         self.toolTip.setViewRadius(radius: 9.0)
-        
-        self.setNeedsLayout()
+        self.toolTip.withClose(accesory: #imageLiteral(resourceName: "close-icon"), size: 20.0)
+        self.layoutIfNeeded()
     }
     
     // MARK: - Stored Properties
@@ -193,7 +193,7 @@ extension ItemWithTextInputCell {
     }
     
     @objc func toolTipButtonTapped( _ sender: UIButton) {
-        
+        self.toolTip.isHidden = false
     }
 }
 

@@ -49,16 +49,6 @@ public final class ThoughtView: UIView {
         
         self.backgroundColor = UIColor.lightGray
         
-        self.subviews(forAutoLayout: [
-            self.textLabel
-        ])
-        
-        self.textLabel.snp.remakeConstraints { (make: ConstraintMaker) -> Void in
-            make.leading.equalToSuperview().offset(1)
-            make.trailing.equalToSuperview().inset(1)
-            make.centerY.equalToSuperview()
-        }
-        
     }
     
     public required init?(coder aDecoder: NSCoder) {
@@ -69,6 +59,17 @@ public final class ThoughtView: UIView {
         super.layoutSubviews()
         
         self.closeImageButton.layer.cornerRadius = self.closeImageButton.frame.width / 2
+        
+        self.subviews(forAutoLayout: [
+            self.textLabel
+        ])
+        
+        self.textLabel.snp.remakeConstraints { (make: ConstraintMaker) -> Void in
+            make.leading.equalToSuperview().offset(10.0)
+            make.trailing.equalToSuperview().inset(10.0)
+            make.bottom.equalToSuperview().inset(5.0)
+            make.top.equalToSuperview().offset(5.0)
+        }
     }
 }
 
@@ -101,7 +102,9 @@ extension ThoughtView {
         self.layer.shadowOpacity = 0.6
         self.layer.shadowRadius = 4.0
         self.layer.shadowPath = UIBezierPath(rect: self.bounds).cgPath
-        self.layer.shouldRasterize = true
+        self.layer.shouldRasterize = false
+        
+        self.layoutIfNeeded()
     }
     
     public func withClose() {
