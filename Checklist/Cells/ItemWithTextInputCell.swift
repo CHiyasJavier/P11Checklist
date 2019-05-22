@@ -36,7 +36,6 @@ public class ItemWithTextInputCell: UITableViewCell {
             ofSize: 12.0,
             weight: UIFont.Weight.semibold
         )
-        view.isHidden = true
         return view
     }()
     
@@ -84,8 +83,7 @@ public class ItemWithTextInputCell: UITableViewCell {
         
         self.subviews(forAutoLayout: [
             self.supportingAnswerView,self.cancelButton,
-             self.saveButton, self.toolTipButton,
-            self.toolTip
+            self.toolTipButton, self.toolTip
         ])
         
         self.supportingAnswerView.snp.remakeConstraints { (make: ConstraintMaker) -> Void in
@@ -96,19 +94,7 @@ public class ItemWithTextInputCell: UITableViewCell {
             make.height.equalTo(70.0)
         }
         
-        self.saveButton.snp.remakeConstraints { [unowned self] (make: ConstraintMaker) in
-            make.trailing.equalToSuperview()
-            make.height.equalTo(20.0)
-            make.width.equalTo(80.0)
-            make.top.equalTo(self.supportingAnswerView.snp.bottom).offset(5.0)
-        }
-        
-        self.cancelButton.snp.remakeConstraints { [unowned self] (make: ConstraintMaker) -> Void in
-            make.top.equalTo(self.saveButton)
-            make.height.equalTo(20.0)
-            make.width.equalTo(80.0)
-            make.trailing.equalTo(self.saveButton.snp.leading).inset(20.0)
-        }
+        self.cancelButtonDefaultConstraint()
         
         self.toolTipButton.snp.remakeConstraints { [unowned self] (make: ConstraintMaker) in
             make.trailing.equalToSuperview().inset(20.0)
@@ -140,7 +126,11 @@ public class ItemWithTextInputCell: UITableViewCell {
             for: UIControl.Event.touchUpInside
         )
         
-        self.cancelButton.addTarget(self, action: #selector(ItemWithTextInputCell.cancelButtonTapped), for: UIControl.Event.touchUpInside)
+        self.cancelButton.addTarget(
+            self,
+            action: #selector(ItemWithTextInputCell.cancelButtonTapped),
+            for: UIControl.Event.touchUpInside
+        )
         
         self.supportingAnswerView.getTextArea().addGestureRecognizer(tapGesture)
         self.supportingAnswerView.delegate = self
@@ -174,6 +164,8 @@ public class ItemWithTextInputCell: UITableViewCell {
     private var model: SectionInfo!
     private var sectionIndex: Int!
     private var toolTipHeight: Constraint!
+    private var cancelButtonTrailingSuperView: Constraint!
+    private var cancelButtonTrailingSaveButton: Constraint!
     
 }
 
@@ -190,11 +182,9 @@ extension ItemWithTextInputCell {
         
         switch self.model.supportingAnswer.isEmpty {
         case true:
-             self.saveButton.isHidden = true
              self.cancelButton.isHidden = true
              self.toolTipButton.isHidden = false
         case false:
-//            self.saveButton.isHidden = false
             self.cancelButton.isHidden = false
             self.toolTipButton.isHidden = true
         }
@@ -205,8 +195,16 @@ extension ItemWithTextInputCell {
     
     @objc func didRecognizeTapGesture( _ gesture: UITapGestureRecognizer) {
         self.supportingAnswerView.getTextArea().becomeFirstResponder()
-        self.cancelButton.isHidden = false
         self.toolTipButton.isHidden = true
+        switch self.supportingAnswerView.getTextArea().text.isEmpty {        
+        case true:
+            self.cancelButtonDefaultConstraint()
+            self.cancelButton.isHidden = false
+        case false:
+            break
+        }
+        
+        self.layoutIfNeeded()
     }
     
     @objc func saveButtonTapped( _ sender: UIButton) {
@@ -268,28 +266,66 @@ extension ItemWithTextInputCell: TextAreaViewDelegate {
             
             switch !trimmedText.isEmpty {
             case true:
-                self.saveButton.isHidden = false
                 self.cancelButton.isHidden = false
                 self.toolTipButton.isHidden = true
                 
                 switch trimmedText == self.model.supportingAnswer {
                 case true:
-                    self.saveButton.isHidden = true
+                    self.saveButton.removeFromSuperview()
+                    
+                    self.cancelButtonDefaultConstraint()
                 case false:
-                    self.saveButton.isHidden = false
+                    
+                    self.subview(forAutoLayout: self.saveButton)
+                    
+                    self.saveButton.snp.remakeConstraints { [unowned self] (make: ConstraintMaker) in
+                        make.trailing.equalToSuperview()
+                        make.height.equalTo(20.0)
+                        make.width.equalTo(80.0)
+                        make.top.equalTo(self.supportingAnswerView.snp.bottom).offset(5.0)
+                    }
+                    
+                    self.cancelButtonWithSaveConstraint()
+                }
+                
+                UIView.animate(withDuration: 0.3) {
+                    self.layoutIfNeeded()
                 }
                 
             case false:
-                self.saveButton.isHidden = true
-                self.cancelButton.isHidden = true
-                self.toolTipButton.isHidden = false
+                self.saveButton.removeFromSuperview()
+                self.cancelButtonDefaultConstraint()
+                self.cancelButton.isHidden = false
+                self.toolTipButton.isHidden = true
             }
         }
         
     }
     
     public func textAreaViewShouldReturn(_ textView: UITextView) -> Bool {
-        self.saveButton.isHidden = true
+        self.cancelButton.isHidden = true
+        self.toolTipButton.isHidden = false
         return true
+    }
+}
+
+// MARK: - Helper Methods
+extension ItemWithTextInputCell {
+    func cancelButtonDefaultConstraint() {
+        self.cancelButton.snp.remakeConstraints { [unowned self] (make: ConstraintMaker) -> Void in
+            make.top.equalTo(self.supportingAnswerView.snp.bottom).offset(5.0)
+            make.height.equalTo(20.0)
+            make.width.equalTo(80.0)
+            make.trailing.equalToSuperview().inset(20.0)
+        }
+    }
+    
+    func cancelButtonWithSaveConstraint() {
+        self.cancelButton.snp.remakeConstraints { [unowned self] (make: ConstraintMaker) -> Void in
+            make.top.equalTo(self.saveButton)
+            make.height.equalTo(20.0)
+            make.width.equalTo(80.0)
+            make.trailing.equalTo(self.saveButton.snp.leading)
+        }
     }
 }
