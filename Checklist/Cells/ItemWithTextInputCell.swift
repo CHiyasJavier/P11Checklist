@@ -194,7 +194,7 @@ extension ItemWithTextInputCell {
              self.cancelButton.isHidden = true
              self.toolTipButton.isHidden = false
         case false:
-            self.saveButton.isHidden = false
+//            self.saveButton.isHidden = false
             self.cancelButton.isHidden = false
             self.toolTipButton.isHidden = true
         }
@@ -237,7 +237,7 @@ extension ItemWithTextInputCell {
     @objc func cancelButtonTapped( _ sender: UIButton) {
         guard let delegate = self.delegate else { return }
         
-        if let index = self.sectionIndex {            
+        if let index = self.sectionIndex {
             if let text = self.supportingAnswerView.getTextArea().text {
                 let trimmedText = text.trimmingCharacters(
                     in: CharacterSet.whitespacesAndNewlines
@@ -271,6 +271,14 @@ extension ItemWithTextInputCell: TextAreaViewDelegate {
                 self.saveButton.isHidden = false
                 self.cancelButton.isHidden = false
                 self.toolTipButton.isHidden = true
+                
+                switch trimmedText == self.model.supportingAnswer {
+                case true:
+                    self.saveButton.isHidden = true
+                case false:
+                    self.saveButton.isHidden = false
+                }
+                
             case false:
                 self.saveButton.isHidden = true
                 self.cancelButton.isHidden = true
