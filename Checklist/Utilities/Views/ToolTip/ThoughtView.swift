@@ -191,10 +191,10 @@ public class AJButton: UIButton {
         
         // Generate the new hit area by adding the hitInsets:
         let newRect = CGRect(
-            x: 0 + hitInsets.left,
-            y: 0 + hitInsets.top,
-            width: self.frame.size.width - hitInsets.left - hitInsets.right,
-            height: self.frame.size.height - hitInsets.top - hitInsets.bottom)
+            x: 0 + self.hitInsets.left,
+            y: 0 + self.hitInsets.top,
+            width: self.frame.size.width - self.hitInsets.left - self.hitInsets.right,
+            height: self.frame.size.height - self.hitInsets.top - self.hitInsets.bottom)
         
         // Check if the point is within the new hit area:
         return newRect.contains(point)

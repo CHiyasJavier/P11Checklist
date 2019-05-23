@@ -186,6 +186,7 @@ extension ItemWithTextInputCell {
              self.toolTipButton.isHidden = false
         case false:
             self.cancelButton.isHidden = false
+            self.cancelButtonDefaultConstraint()
             self.toolTipButton.isHidden = true
         }
     }
