@@ -35,11 +35,17 @@ public final class ThoughtView: UIView {
         return view
     }()
     
-    private let closeImageButton: UIButton = {
-        let view: UIButton = UIButton()
+    private let closeImageButton: AJButton = {
+        let view: AJButton = AJButton()
         view.layer.borderColor = UIColor.black.withAlphaComponent(0.2).cgColor
         view.layer.borderWidth = 1.0
         view.backgroundColor = UIColor.white
+        view.hitInsets = UIEdgeInsets(
+            top: -40,
+            left: -40,
+            bottom: -40,
+            right: -40
+        )
         return view
     }()
     
@@ -174,6 +180,35 @@ extension ThoughtView {
             // Recursively call the method, to perform each animation in sequence
             self.animate(animations)
         })
+    }
+}
+
+public class AJButton: UIButton {
+    // Create a property to store the hit insets:
+    var hitInsets:UIEdgeInsets = UIEdgeInsets.zero
+    
+    public override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        
+        // Generate the new hit area by adding the hitInsets:
+        let newRect = CGRect(
+            x: 0 + hitInsets.left,
+            y: 0 + hitInsets.top,
+            width: self.frame.size.width - hitInsets.left - hitInsets.right,
+            height: self.frame.size.height - hitInsets.top - hitInsets.bottom)
+        
+        // Check if the point is within the new hit area:
+        return newRect.contains(point)
+        
+    }
+    
+    public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        let biggerButtonFrame = self.frame.insetBy(dx: -30, dy: -30)
+        
+        if biggerButtonFrame.contains(point) {
+            return self
+        }
+        
+        return super.hitTest(point, with: event)
     }
 }
 
