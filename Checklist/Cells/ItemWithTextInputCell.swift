@@ -220,6 +220,7 @@ extension ItemWithTextInputCell {
             case true:
                 self.model.supportingAnswer = trimmedText
                 self.model.isEditInput = true
+                self.saveButton.removeFromSuperview()
                 delegate.saveTapped(on: self.sectionIndex)
             case false:
                 break
